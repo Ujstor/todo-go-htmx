@@ -15,7 +15,7 @@ func (s *service) CreateTodo(todo string) error {
 
 func (s *service) GetAllTodos() ([]Todo, error) {
 	var todos []Todo
-	statement := `SELECT id, todo, done FROM todos;`
+	statement := `SELECT id, todo, done FROM todos ORDER BY id;`
 
 	rows, err := s.db.Query(statement)
 	if err != nil {

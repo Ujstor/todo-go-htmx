@@ -23,4 +23,4 @@ tmp/
 .idea
 
 # .env file
-.env
+#.env

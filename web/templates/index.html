@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+    <head>
+        <script src="https://unpkg.com/htmx.org@1.9.9" integrity="sha384-QFjmbokDn2DjBjq+fM+8LUIVrAgqcNW2s0PjAxHETgRn9l4fvX31ZxDxvwQnyMOX" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.18/dist/full.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    </head>
+    <body class="container max-w-xl mx-auto">
+        <h1 class="font-bold text-2xl my-16 text-center">HTMx ToDo!</h1>
+
+        <form id="todoForm" class="grid grid-cols-7 m-4 gap-2">
+            <input class="col-span-5 input input-bordered" type="text" name="todo" />
+            <button class="btn btn-accent col-span-2" 
+                hx-post="/create" 
+                hx-target="#todos"
+                hx-swap="innerHTML">
+                Create Todo
+            </button>
+        </form>
+
+        <div id="todos" class="my-8">
+            {{ block "Todos" . }}
+            {{ range . }}
+                <div class="grid grid-cols-7 gap-2 mt-4">
+                    <p class="col-span-5 {{if .Done }} line-through {{end}}">
+                        {{.Todo}}
+                    </p>
+                    <button class="btn btn-success"
+                        hx-put="/todo/{{.Id}}"
+                        hx-target="#todos"
+                        hx-swap="innerHTML">
+                        &#10003;
+                    </button>
+                    <button class="btn btn-error"
+                        hx-delete="/todo/{{.Id}}"
+                        hx-target="#todos"
+                        hx-swap="innerHTML">
+                        &#x2717;
+                    </button>
+                </div>
+            {{ end }}
+            {{ end }}
+        </div>
+    </body>
+</html>
