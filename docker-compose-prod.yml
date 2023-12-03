@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   todo:
-    image: ujstor/todo-go
+    image: ujstor/todo-go:1.0.0
     ports:
       - "8080:8080"
     depends_on:

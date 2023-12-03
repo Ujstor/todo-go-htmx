@@ -1,4 +1,4 @@
-# Todo app Go-Htmx-Air-Tailwind
+# Todo app Go-HTMx-Air-Tailwind
 
 Todo-Go is a simple web-based to-do list application built with Go, using the Chi router and HTMx for dynamic content updates without full page reloads. The application allows users to create, mark as done, and delete to-do items. 
 
