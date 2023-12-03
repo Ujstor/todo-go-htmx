@@ -8,7 +8,7 @@ import (
 	"time"
 
 	_ "github.com/joho/godotenv/autoload"
-	"test/internal/database"
+	"todo-go/internal/database"
 )
 
 type Server struct {

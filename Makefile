@@ -39,21 +39,33 @@ clean:
 	@echo "Cleaning..."
 	@rm -f main
 
+# Determine OS
+OS := $(shell go env GOOS)
+EXEC_EXT :=
+ifeq ($(OS),windows)
+    EXEC_EXT := .exe
+endif
+
 # Live Reload
 watch:
+	@if [ "$(OS)" = "windows" ]; then \
+        cp air_windows.toml .air.toml; \
+    else \
+        cp air_unix.toml .air.toml; \
+    fi
 	@if command -v air > /dev/null; then \
-	    air; \
-	    echo "Watching...";\
-	else \
-	    read -p "Go's 'air' is not installed on your machine. Do you want to install it? [Y/n] " choice; \
-	    if [ "$$choice" != "n" ] && [ "$$choice" != "N" ]; then \
-	        go install github.com/cosmtrek/air@latest; \
-	        air; \
-	        echo "Watching...";\
-	    else \
-	        echo "You chose not to install air. Exiting..."; \
-	        exit 1; \
-	    fi; \
-	fi
+        air; \
+        echo "Watching...";\
+    else \
+        read -p "Go's 'air' is not installed on your machine. Do you want to install it? [Y/n] " choice; \
+        if [ "$$choice" != "n" ] && [ "$$choice" != "N" ]; then \
+            go install github.com/cosmtrek/air@latest; \
+            air; \
+            echo "Watching...";\
+        else \
+            echo "You chose not to install air. Exiting..."; \
+            exit 1; \
+        fi; \
+    fi
 
 .PHONY: all build run test clean

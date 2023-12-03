@@ -1,7 +1,7 @@
 package main
 
 import (
-	"test/internal/server"
+	"todo-go/internal/server"
 )
 
 func main() {
