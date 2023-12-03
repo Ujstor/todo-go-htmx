@@ -1,8 +1,18 @@
 version: '3.8'
 
 services:
+  todo:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - psql
+  
   psql:
     image: postgres:latest
+    build:
+      context: .
+      dockerfile: ./internal/database/initdb/Dockerfile.db
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
@@ -11,6 +21,7 @@ services:
       - "${DB_PORT}:5432"
     volumes:
       - psql_volume:/var/lib/postgresql/data
+      - ./internal/database/initdb/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   psql_volume:
