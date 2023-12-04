@@ -20,8 +20,8 @@ services:
     ports:
       - "${DB_PORT}:5432"
     volumes:
-      - psql_volume:/var/lib/postgresql/data
+      - psql_volume_todo:/var/lib/postgresql/data
       - ./internal/database/initdb/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
-  psql_volume:
+  psql_volume_todo:
