@@ -4,7 +4,7 @@ services:
   todo:
     image: ujstor/todo-go:1.0.0
     ports:
-      - "8088:8088"
+      - "${PORT}:${PORT}"
     depends_on:
       - psql
   

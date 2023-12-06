@@ -11,11 +11,11 @@ To set up Todo-Go using Docker:
 2. Copy the `.env.example` file to create a `.env` file and fill in your environment variables
 3. Start Docker services using `make docker-run`
 
-The application and the PostgreSQL database will be started. The app will be accessible at `http://localhost:8080`.
+The application and the PostgreSQL database will be started. The app will be accessible at `http://localhost:8088`.
 
 ## Usage
 
-- Access the Todo-Go app at `http://localhost:8080`.
+- Access the Todo-Go app at `http://localhost:8088`.
 - You can add, mark as done, and delete to-do items using the web interface.
 
 ### Using Docker
