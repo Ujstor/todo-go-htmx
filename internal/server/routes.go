@@ -16,7 +16,7 @@ import (
 func (s *Server) RegisterRoutes() http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
-	fs := http.FileServer(http.Dir("web/static")) 
+	fs := http.FileServer(http.Dir("cmd/web/static")) 
     r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
 	r.Get("/", s.indexHandler)
@@ -36,7 +36,7 @@ func (s *Server) sendTodos(w http.ResponseWriter) {
         return
     }
 
-    tmpl := template.Must(template.ParseFiles("web/templates/index.html"))
+    tmpl := template.Must(template.ParseFiles("cmd/web/templates/index.html"))
 
     err = tmpl.ExecuteTemplate(w, "Todos", todos)
     if err != nil {
@@ -52,7 +52,7 @@ func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal server Error", http.StatusInternalServerError)
 	}
 
-	tmpl := template.Must(template.ParseFiles("web/templates/index.html"))
+	tmpl := template.Must(template.ParseFiles("cmd/web/templates/index.html"))
 	err = tmpl.Execute(w, todoos)
 	if err != nil {
 		log.Fatalf("Could not execute template. Err: %v", err)
