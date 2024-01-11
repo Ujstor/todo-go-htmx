@@ -68,7 +68,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh "docker build --no-cache -t ${DOCKER_HUB_USERNAME}/${DOCKER_REPO_NAME}:${TAG} ."
+                    sh "docker build --no-cache -t ${DOCKER_HUB_USERNAME}/${DOCKER_REPO_NAME}:${TAG} --target prod ."
                 }
             }
         }

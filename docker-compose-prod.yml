@@ -2,26 +2,54 @@ version: '3.8'
 
 services:
   todo:
-    image: ujstor/todo-go:1.0.0
+    image: ujstor/todo-go:1.0.1
+    restart: unless-stopped
     ports:
       - "${PORT}:${PORT}"
     depends_on:
-      - psql
+      psql:
+        condition: service_healthy
+    networks:
+      - htmx
   
   psql:
     image: postgres:latest
-    build:
-      context: .
-      dockerfile: ./internal/database/initdb/Dockerfile.db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${DB_PORT}:5432"
+      - ${DB_PORT}:5432
     volumes:
       - psql_volume_todo:/var/lib/postgresql/data
-      - ./internal/database/initdb/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}'"]
+      interval: 10s
+      timeout: 1s
+      retries: 5
+    networks:
+      - htmx
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: migrate
+    volumes:
+      - .:/app:ro
+    working_dir: /app
+    environment:
+      GOOSE_DRIVER: postgres
+      GOOSE_DBSTRING: "user=${DB_USERNAME} host=${DB_HOST} password=${DB_PASSWORD} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable"
+    depends_on:
+      psql:
+        condition: service_healthy
+    networks:
+      - htmx
 
 volumes:
   psql_volume_todo:
+
+networks:
+  htmx:

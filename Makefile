@@ -1,7 +1,6 @@
 # Simple Makefile for a Go project
 
 # Build the application
-all: build
 
 build:
 	@echo "Building..."
@@ -13,7 +12,7 @@ run:
 
 # Create DB container
 docker-run:
-	@if docker compose up >/dev/null; then \
+	@if docker compose up --build >/dev/null; then \
 		: ; \
 	else \
 		echo "Falling back to Docker Compose V1"; \
@@ -53,23 +52,23 @@ watch:
 
 # DB migrations
 migrate-up:
-	@if	docker compose run --rm migrate goose -dir ./migrations up > /dev/null; then \
+	@if	docker compose run --rm migrate goose -dir ./internal/database/migrations up > /dev/null; then \
 	: ; \
 	else \
-		docker-compose run --rm migrate goose -dir ./migrations up > /dev/null; \
+		docker-compose run --rm migrate goose -dir ./internal/database/migrations up > /dev/null; \
 	fi
 
 migrate-status:
-	@if	docker compose run --rm migrate goose -dir ./migrations status > /dev/null; then \
+	@if	docker compose run --rm migrate goose -dir ./internal/database/migrations status > /dev/null; then \
 	: ; \
 	else \
-		docker-compose run --rm migrate goose -dir ./migrations status > /dev/null; \
+		docker-compose run --rm migrate goose -dir ./internal/database/migrations status > /dev/null; \
 	fi
 
 migrate-down:
-	@if	docker compose run --rm migrate goose -dir ./migrations down > /dev/null; then \
+	@if	docker compose run --rm migrate goose -dir ./internal/database/migrations down > /dev/null; then \
 	: ; \
 	else \
-		docker-compose run --rm migrate goose -dir ./migrations down > /dev/null; \
+		docker-compose run --rm migrate goose -dir ./internal/database/migrations down > /dev/null; \
 
-.PHONY: all build run test clean docker-run docker-down watch migrate-up migrate-down migrate-status db-init
+.PHONY: all build run test clean docker-run docker-down watch migrate-up migrate-down migrate-status

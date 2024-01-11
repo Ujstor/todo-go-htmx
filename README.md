@@ -19,18 +19,13 @@ The application and the PostgreSQL database will be started. The app will be acc
 - You can add, mark as done, and delete to-do items using the web interface.
 
 ### Using Docker
-When you start the application with Docker Compose, it automatically sets up a PostgreSQL database and connects the Todo-Go application to it. The database schema will be initialized based on the `init.sql` script.
+When you start the application with Docker Compose, it automatically sets up a PostgreSQL database and connects the Todo-Go application to it. The database schema will be initialized based on the `init.sql.
 
 To stop the application and remove the containers, you can use: `make docker-down`
 
 To persist the PostgreSQL data between runs, a Docker volume `psql_volume` is used as defined in the `docker-compose.yml`
 
 ## MakeFile
-
-run all make commands with clean tests
-```bash
-make all build
-```
 
 build the application
 ```bash
@@ -42,7 +37,7 @@ run the application
 make run
 ```
 
-Create DB and App container
+Create DB, migration and App container
 ```bash
 make docker-run
 ```
@@ -55,6 +50,14 @@ make docker-down
 live reload the application
 ```bash
 make watch
+```
+
+
+db migrations
+```bash
+make migrate-status
+make migrate-up
+make migrate-down
 ```
 
 clean up binary from the last build

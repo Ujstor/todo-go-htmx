@@ -14,7 +14,11 @@ RUN make build
 EXPOSE ${PORT}
 CMD [ "make", "watch" ]
 
+FROM base as prod
+RUN make build
+EXPOSE ${PORT}
+CMD [ "./main" ]
 
 FROM base as migrate
 RUN go install github.com/pressly/goose/v3/cmd/goose@latest
-CMD ["goose", "-dir", "./migrations", "up"]
+CMD ["goose", "-dir", "./internal/database/migrations", "up"]
