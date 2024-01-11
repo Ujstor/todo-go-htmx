@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   todo:
-    image: ujstor/todo-go:1.0.1
+    image: ujstor/todo-go-htmx:1.0.0
     restart: unless-stopped
     ports:
       - "${PORT}:${PORT}"
