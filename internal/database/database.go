@@ -12,10 +12,10 @@ import (
 
 type Service interface {
 	GetAllTodos() ([]Todo, error)
-    CreateTodo(todo string) error
-    GetTodo(id uint64) (Todo, error)
-    MarkDone(id uint64) error
-    Delete(id uint64) error
+	CreateTodo(todo string) error
+	GetTodo(id uint64) (Todo, error)
+	MarkDone(id uint64) error
+	Delete(id uint64) error
 }
 
 type service struct {

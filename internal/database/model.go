@@ -40,28 +40,28 @@ func (s *service) GetAllTodos() ([]Todo, error) {
 }
 
 func (s *service) GetTodo(id uint64) (Todo, error) {
-    statement := `SELECT todo, done FROM todos WHERE id=$1;`
+	statement := `SELECT todo, done FROM todos WHERE id=$1;`
 
-    var todo Todo
-    todo.Id = id
+	var todo Todo
+	todo.Id = id
 
-    row := s.db.QueryRow(statement, id)
-    err := row.Scan(&todo.Todo, &todo.Done)
-    if err != nil {
-        return todo, err
-    }
+	row := s.db.QueryRow(statement, id)
+	err := row.Scan(&todo.Todo, &todo.Done)
+	if err != nil {
+		return todo, err
+	}
 
-    return todo, nil
+	return todo, nil
 }
 
 func (s *service) MarkDone(id uint64) error {
-    statement := `UPDATE todos SET done = NOT done WHERE id=$1;`
-    _, err := s.db.Exec(statement, id)
-    return err
+	statement := `UPDATE todos SET done = NOT done WHERE id=$1;`
+	_, err := s.db.Exec(statement, id)
+	return err
 }
 
 func (s *service) Delete(id uint64) error {
-    statement := `DELETE FROM todos WHERE id=$1;`
-    _, err := s.db.Exec(statement, id)
-    return err
+	statement := `DELETE FROM todos WHERE id=$1;`
+	_, err := s.db.Exec(statement, id)
+	return err
 }

@@ -17,32 +17,32 @@ func (s *Server) RegisterRoutes() http.Handler {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	fs := http.FileServer(http.Dir("cmd/web/static")) 
-    r.Handle("/static/*", http.StripPrefix("/static/", fs))
+	r.Handle("/static/*", http.StripPrefix("/static/", fs))
 
 	r.Get("/", s.indexHandler)
 	r.Post("/create", s.createTodoHandler)
-    r.Get("/todo/{id}", s.getTodoHandler)
-    r.Put("/todo/{id}", s.markDoneHandler)
-    r.Delete("/todo/{id}", s.deleteTodoHandler)
+	r.Get("/todo/{id}", s.getTodoHandler)
+	r.Put("/todo/{id}", s.markDoneHandler)
+	r.Delete("/todo/{id}", s.deleteTodoHandler)
 	
 	return r
 }
 
 func (s *Server) sendTodos(w http.ResponseWriter) {
-    todos, err := s.db.GetAllTodos()
-    if err != nil {
-        fmt.Println("Could not get all todos from db", err)
-        http.Error(w, "Internal server error", http.StatusInternalServerError)
-        return
-    }
+	todos, err := s.db.GetAllTodos()
+	if err != nil {
+		fmt.Println("Could not get all todos from db", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
 
-    tmpl := template.Must(template.ParseFiles("cmd/web/templates/index.html"))
+	tmpl := template.Must(template.ParseFiles("cmd/web/templates/index.html"))
 
-    err = tmpl.ExecuteTemplate(w, "Todos", todos)
-    if err != nil {
-        fmt.Println("Could not execute template", err)
-        http.Error(w, "Internal server error", http.StatusInternalServerError)
-    }
+	err = tmpl.ExecuteTemplate(w, "Todos", todos)
+	if err != nil {
+		fmt.Println("Could not execute template", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+	}
 }
 
 func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
@@ -61,27 +61,27 @@ func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
 
 // Create a new todo
 func (s *Server) createTodoHandler(w http.ResponseWriter, r *http.Request) {
-    err := r.ParseForm() 
+	err := r.ParseForm() 
 	if err != nil {
-        http.Error(w, "Invalid form data", http.StatusBadRequest)
-        return
-    }
+		http.Error(w, "Invalid form data", http.StatusBadRequest)
+		return
+	}
 
-    todoText := r.FormValue("todo")
-    if todoText == "" {
-        http.Error(w, "Todo text is required", http.StatusBadRequest)
-        return
-    }
+	todoText := r.FormValue("todo")
+	if todoText == "" {
+		http.Error(w, "Todo text is required", http.StatusBadRequest)
+		return
+	}
 
-    todo := database.Todo{
-        Todo: todoText,
-    }
+	todo := database.Todo{
+		Todo: todoText,
+	}
 
-    err = s.db.CreateTodo(todo.Todo)
-    if err != nil {
-        http.Error(w, "Failed to create todo", http.StatusInternalServerError)
-        return
-    }
+	err = s.db.CreateTodo(todo.Todo)
+	if err != nil {
+		http.Error(w, "Failed to create todo", http.StatusInternalServerError)
+		return
+	}
 	s.sendTodos(w)
 }
 
