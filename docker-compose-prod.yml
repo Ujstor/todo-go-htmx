@@ -2,10 +2,12 @@ version: '3.8'
 
 services:
   todo:
-    image: ujstor/todo-go-htmx:1.0.0
+    image: ujstor/todo-go-htmx:1.0.1
     restart: unless-stopped
     ports:
       - "${PORT}:${PORT}"
+    env_file:
+      - .env
     depends_on:
       psql:
         condition: service_healthy
