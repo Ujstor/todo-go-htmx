@@ -2,19 +2,27 @@ version: '3.8'
 
 services:
   todo:
-    image: ujstor/todo-go-htmx:1.0.1
+    image: ujstor/todo-go-htmx:1.0.2
     restart: unless-stopped
     ports:
-      - "${PORT}:${PORT}"
-    env_file:
-      - .env
+      - ${PORT}:${PORT}
+    environment:
+      PORT: ${PORT}
+      APP_ENV: ${APP_ENV}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     depends_on:
-      psql:
+      psql-todo-htmx:
         condition: service_healthy
+    volumes:
+     - todo_htmx:/app
     networks:
       - htmx
   
-  psql:
+  psql-todo-htmx:
     image: postgres:latest
     restart: unless-stopped
     environment:
@@ -24,7 +32,7 @@ services:
     ports:
       - ${DB_PORT}:5432
     volumes:
-      - psql_volume_todo:/var/lib/postgresql/data
+      - psql_volume_todo_htmx:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USERNAME} -d ${DB_DATABASE}'"]
       interval: 10s
@@ -36,22 +44,23 @@ services:
   migrate:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.prod
       target: migrate
     volumes:
-      - .:/app:ro
+      - todo_htmx:/app:ro
     working_dir: /app
     environment:
       GOOSE_DRIVER: postgres
       GOOSE_DBSTRING: "user=${DB_USERNAME} host=${DB_HOST} password=${DB_PASSWORD} port=${DB_PORT} dbname=${DB_DATABASE} sslmode=disable"
     depends_on:
-      psql:
+      psql-todo-htmx:
         condition: service_healthy
     networks:
       - htmx
 
 volumes:
-  psql_volume_todo:
+  psql_volume_todo_htmx:
+  todo_htmx:
 
 networks:
   htmx:

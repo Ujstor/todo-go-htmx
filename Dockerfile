@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine as base
+FROM golang:1.22.1-alpine as base
 
 RUN apk add --no-cache make
 
@@ -13,11 +13,6 @@ RUN go get -u github.com/cosmtrek/air
 RUN make build
 EXPOSE ${PORT}
 CMD [ "make", "watch" ]
-
-FROM base as prod
-RUN make build
-EXPOSE ${PORT}
-CMD [ "./main" ]
 
 FROM base as migrate
 RUN go install github.com/pressly/goose/v3/cmd/goose@latest
