@@ -1,19 +1,17 @@
-FROM golang:1.22.1-alpine as base
-
-RUN apk add --no-cache make
+FROM golang:1.22.1-alpine AS base
 
 WORKDIR /app
 
 COPY go.mod go.sum ./
 RUN go mod download
+
 COPY . .
 
-FROM base as dev
-RUN go get -u github.com/cosmtrek/air
-RUN make build
-EXPOSE ${PORT}
-CMD [ "make", "watch" ]
+RUN go build -o main cmd/api/main.go
 
-FROM base as migrate
-RUN go install github.com/pressly/goose/v3/cmd/goose@latest
-CMD ["goose", "-dir", "./internal/database/migrations", "up"]
+FROM alpine:3.19.0 AS prod
+WORKDIR /app
+COPY --from=base /app/main /app/main
+COPY cmd/web cmd/web
+EXPOSE ${PORT}
+CMD ["./main"]

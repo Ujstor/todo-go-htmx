@@ -36,6 +36,11 @@ func New() Service {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	if err := DBMigrations(db); err != nil {
+		log.Fatal(err)
+	}
+
 	s := &service{db: db}
 	return s
 }

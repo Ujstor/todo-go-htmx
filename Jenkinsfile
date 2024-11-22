@@ -7,7 +7,7 @@ pipeline {
         DOCKER_HUB_USERNAME = 'ujstor'
         DOCKER_REPO_NAME = 'todo-go-htmx'
         BRANCH = 'master'
-        VERSION_PART = 'Patch' // Patch, Minor, Major
+        VERSION_PART = 'Minor' // Patch, Minor, Major
         DOCKER_JENKINS_CERDIDENTALS_ID = 'be9636c4-b828-41af-ad0b-46d4182dfb06'
         TAG = '' // Generated automatically
     }
@@ -68,7 +68,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh "docker build --no-cache -t ${DOCKER_HUB_USERNAME}/${DOCKER_REPO_NAME}:${TAG} -f Dockerfile.prod --target prod ."
+                    sh "docker build --no-cache -t ${DOCKER_HUB_USERNAME}/${DOCKER_REPO_NAME}:${TAG} -f Dockerfile --target prod ."
                 }
             }
         }
