@@ -52,14 +52,6 @@ live reload the application
 make watch
 ```
 
-
-db migrations
-```bash
-make migrate-status
-make migrate-up
-make migrate-down
-```
-
 clean up binary from the last build
 ```bash
 make clean

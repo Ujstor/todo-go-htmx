@@ -50,25 +50,5 @@ watch:
 	    fi; \
 	fi
 
-# DB migrations
-migrate-up:
-	@if	docker compose run --rm migrate goose -dir ./internal/database/migrations up > /dev/null; then \
-	: ; \
-	else \
-		docker-compose run --rm migrate goose -dir ./internal/database/migrations up > /dev/null; \
-	fi
 
-migrate-status:
-	@if	docker compose run --rm migrate goose -dir ./internal/database/migrations status > /dev/null; then \
-	: ; \
-	else \
-		docker-compose run --rm migrate goose -dir ./internal/database/migrations status > /dev/null; \
-	fi
-
-migrate-down:
-	@if	docker compose run --rm migrate goose -dir ./internal/database/migrations down > /dev/null; then \
-	: ; \
-	else \
-		docker-compose run --rm migrate goose -dir ./internal/database/migrations down > /dev/null; \
-
-.PHONY: all build run test clean docker-run docker-down watch migrate-up migrate-down migrate-status
+.PHONY: all build run test clean docker-run docker-down watch
