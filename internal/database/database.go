@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -31,7 +32,14 @@ var (
 )
 
 func New() Service {
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", username, password, host, port, database)
+	// URL encode the username and password to handle special characters
+	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
+		url.QueryEscape(username),
+		url.QueryEscape(password),
+		host,
+		port,
+		database)
+
 	db, err := sql.Open("pgx", connStr)
 	if err != nil {
 		log.Fatal(err)
